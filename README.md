@@ -30,3 +30,19 @@ ADMIN_USER=12345678
 ```
 
 To obtain a token, message [@BotFather](https://t.me/BotFather).
+
+## Usage
+
+Note: This will definitely change in the future!
+
+You can create a commands.json file in the root folder of the project:
+
+```json
+{
+  "command text": "shell command"
+}
+```
+
+These are basically shortcuts for longer commands and will be shown as a keyboard.
+
+All other commands that are not supplied in this file are executed like that on the shell.

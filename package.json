@@ -11,6 +11,8 @@
   "license": "MIT",
   "dependencies": {
     "dotenv": "^6.2.0",
+    "lodash": "^4.17.11",
+    "shelljs": "^0.8.3",
     "tgfancy": "^0.13.0"
   },
   "devDependencies": {
