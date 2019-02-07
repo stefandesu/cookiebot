@@ -1,6 +1,5 @@
 const TelegramBot = require("tgfancy")
 const shell = require("shelljs")
-const _ = require("lodash")
 require("dotenv").config()
 
 const
@@ -67,8 +66,8 @@ function mainHandler({ data, message }) {
     } else {
       shellCommand = data
     }
-    shell.exec(shellCommand, (code, stdout, stderr) => {
-      bot.sendMessage(chatId, "```\n" + (stdout || stderr) + "\n```", options)
+    shell.exec(shellCommand, { silent: true }, (code, stdout, stderr) => {
+      bot.sendMessage(chatId, "```\n" + (stdout.trim() || stderr.trim() || "no output") + "\n```", options)
     })
   } else {
     bot.sendMessage(chatId, "No permission.")
