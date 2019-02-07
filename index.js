@@ -74,6 +74,6 @@ function mainHandler({ data, message }) {
       }
     })
   } else {
-    bot.sendMessage(chatId, "No permission.")
+    bot.sendMessage(chatId, `No permission for ${chatId}.`)
   }
 }
