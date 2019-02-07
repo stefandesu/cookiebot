@@ -11,11 +11,11 @@ let commands
 try {
   commands = require("./commands.json")
 } catch(error) {
-  commands = {}
+  commands = []
 }
 console.log("Commands:")
-for (let command of Object.keys(commands)) {
-  console.log(`- ${command}`)
+for (let command of commands) {
+  console.log(`- ${command.match}`)
 }
 console.log()
 
@@ -26,12 +26,14 @@ let options = {
   }
 }
 // Load all commands into the keyboard
-_.forEach(commands, (command, key) => {
-  if (!options.reply_markup.keyboard.length || options.reply_markup.keyboard[options.reply_markup.keyboard.length - 1].length > 2) {
-    options.reply_markup.keyboard.push([])
+for (let { match, keyboard } of commands) {
+  if (keyboard) {
+    if (!options.reply_markup.keyboard.length || options.reply_markup.keyboard[options.reply_markup.keyboard.length - 1].length > 2) {
+      options.reply_markup.keyboard.push([])
+    }
+    options.reply_markup.keyboard[options.reply_markup.keyboard.length - 1].push(match)
   }
-  options.reply_markup.keyboard[options.reply_markup.keyboard.length - 1].push(key)
-})
+}
 console.log(options)
 
 const bot = new TelegramBot(telegramToken, {polling: true})
@@ -49,12 +51,12 @@ function mainHandler({ data, message }) {
   let chatId = message.chat.id
   let shellCommand = null
   if (adminUser == chatId) {
-    let matchedCommands = _.keys(commands).filter(key => data.match(new RegExp(key)))
-    if (matchedCommands.length) {
+    let matchedCommand = commands.find(({ match }) => data.match(new RegExp(match)))
+    if (matchedCommand) {
       // Only take the first match
-      let command = matchedCommands[0]
-      let commandToExecute = commands[command]
-      let matches = data.match(new RegExp(command))
+      let { match, command } = matchedCommand
+      let commandToExecute = command
+      let matches = data.match(new RegExp(match))
       // Replace parameters
       let index = 1
       while (index < matches.length) {

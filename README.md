@@ -38,17 +38,27 @@ Note: This will definitely change in the future!
 You can create a commands.json file in the root folder of the project:
 
 ```json
-{
-  "command regexp": "shell command"
-}
+[
+  {
+    "match": "some regexp",
+    "command": "command to execute",
+    "keyboard": true
+  }
+]
 ```
 
-These are basically shortcuts for longer commands and will be shown as a keyboard. The matched groups in the "command regexp" will replace patterns `{x}` in the shell command where `x` is the zero-based index of the group. Example:
+These are basically shortcuts for longer commands and will be shown as a keyboard if `keyboard` is `true`. The matched groups in the match will replace patterns `{x}` in the command where `x` is the zero-based index of the group. Example:
 
 ```json
-{
-  "ls (.*)": "ls {0}"
-}
+[
+  {
+    "match": "ls (.*)",
+    "command": "ls {0}",
+    "keyboard": false
+  }
+]
 ```
+
+If more than one command matches the message, the first one in order will be taken.
 
 All other commands that are not matched in this file are executed like that on the shell.
