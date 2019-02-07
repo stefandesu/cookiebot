@@ -67,6 +67,10 @@ If more than one command matches the message, the first one in order will be tak
 
 All other commands that are not matched in this file are executed like that on the shell.
 
+## Fixed commands
+
+- `/list` - Returns a list of commands (`match` => `command`)
+
 
 ## TODO
 

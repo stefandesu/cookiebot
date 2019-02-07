@@ -51,6 +51,14 @@ function mainHandler({ data, message }) {
   let chatId = message.chat.id
   let shellCommand = null
   if (adminUser == chatId) {
+    if (data == "/list") {
+      let message = ""
+      for (let command of commands) {
+        message += `\`${command.match}\` => \`${command.command}\`\n`
+      }
+      bot.sendMessage(chatId, message, options)
+      return
+    }
     let matchedCommand = commands.find(({ match }) => data.match(new RegExp(match)))
     let { match, command, deleteMessage } = matchedCommand || {}
     if (matchedCommand) {
