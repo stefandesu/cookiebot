@@ -26,10 +26,12 @@ npm run dev
 
 ```
 TELEGRAM_TOKEN=123456789:abcdefghijkl...xyz
-ADMIN_USER=12345678
+ADMIN_USERS=12345678,87654321
 ```
 
 To obtain a token, message [@BotFather](https://t.me/BotFather).
+
+`ADMIN_USERS` can include group chats as well.
 
 ## Usage
 
@@ -75,5 +77,5 @@ All other commands that are not matched in this file are executed like that on t
 ## TODO
 
 - [ ] Let bot pin a message in a group and update that message regularly (like `uptime`)
-- [ ] Add more than one admin
+- [x] Add more than one admin
 - [ ] Add users with user permissions

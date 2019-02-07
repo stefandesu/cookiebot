@@ -4,7 +4,7 @@ require("dotenv").config()
 
 const
   telegramToken = process.env.TELEGRAM_TOKEN,
-  adminUser = process.env.ADMIN_USER,
+  adminUsers = (process.env.ADMIN_USERS || "").split(","),
   maxMessageLength = 4096 - 10
 
 let commands
@@ -13,6 +13,7 @@ try {
 } catch(error) {
   commands = []
 }
+console.log("Admin users:", adminUsers.join(", "))
 console.log("Commands:")
 for (let command of commands) {
   console.log(`- ${command.match}`)
@@ -50,7 +51,7 @@ function textHandler(message) {
 function mainHandler({ data, message }) {
   let chatId = message.chat.id
   let shellCommand = null
-  if (adminUser == chatId) {
+  if (adminUsers.includes(`${chatId}`)) {
     if (data == "/list") {
       let message = ""
       for (let command of commands) {
