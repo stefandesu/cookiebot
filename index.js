@@ -46,14 +46,22 @@ function textHandler(message) {
 }
 
 function mainHandler({ data, message }) {
-  console.log("Message:", data)
   let chatId = message.chat.id
   let shellCommand = null
   if (adminUser == chatId) {
-    if (commands[data]) {
-      let command = commands[data]
-      console.log("command:", command)
-      shellCommand = command
+    let matchedCommands = _.keys(commands).filter(key => data.match(new RegExp(key)))
+    if (matchedCommands.length) {
+      // Only take the first match
+      let command = matchedCommands[0]
+      let commandToExecute = commands[command]
+      let matches = data.match(new RegExp(command))
+      // Replace parameters
+      let index = 1
+      while (index < matches.length) {
+        commandToExecute = commandToExecute.replace(`{${index - 1}}`, matches[index])
+        index += 1
+      }
+      shellCommand = commandToExecute
     } else {
       shellCommand = data
     }

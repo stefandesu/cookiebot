@@ -39,10 +39,16 @@ You can create a commands.json file in the root folder of the project:
 
 ```json
 {
-  "command text": "shell command"
+  "command regexp": "shell command"
 }
 ```
 
-These are basically shortcuts for longer commands and will be shown as a keyboard.
+These are basically shortcuts for longer commands and will be shown as a keyboard. The matched groups in the "command regexp" will replace patterns `{x}` in the shell command where `x` is the zero-based index of the group. Example:
 
-All other commands that are not supplied in this file are executed like that on the shell.
+```json
+{
+  "ls (.*)": "ls {0}"
+}
+```
+
+All other commands that are not matched in this file are executed like that on the shell.
