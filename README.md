@@ -59,6 +59,10 @@ These are basically shortcuts for longer commands and will be shown as a keyboar
 ]
 ```
 
+Additional options:
+
+- `deleteMessage` - If `true`, the user message will be deleted. This is only possible in groups where the bot has the correct permissions, otherwise an error message will be sent.
+
 If more than one command matches the message, the first one in order will be taken.
 
 All other commands that are not matched in this file are executed like that on the shell.

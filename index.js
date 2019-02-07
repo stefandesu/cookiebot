@@ -52,9 +52,8 @@ function mainHandler({ data, message }) {
   let shellCommand = null
   if (adminUser == chatId) {
     let matchedCommand = commands.find(({ match }) => data.match(new RegExp(match)))
+    let { match, command, deleteMessage } = matchedCommand || {}
     if (matchedCommand) {
-      // Only take the first match
-      let { match, command } = matchedCommand
       let commandToExecute = command
       let matches = data.match(new RegExp(match))
       // Replace parameters
@@ -68,12 +67,17 @@ function mainHandler({ data, message }) {
       shellCommand = data
     }
     shell.exec(shellCommand, { silent: true }, (code, stdout, stderr) => {
+      if (deleteMessage) {
+        bot.deleteMessage(chatId, message.message_id).catch(() => {
+          bot.sendMessage(chatId, "Message could not be deleted. Note that this is only possible in a group where the bot has the correct permissions.", options)
+        })
+      }
       let messages = (stdout.trim() || stderr.trim() || "no output").match(new RegExp(`(.{1,${maxMessageLength}})`, "gs"))
       for (let message of messages) {
         bot.sendMessage(chatId, "```\n" + message + "\n```", options)
       }
     })
   } else {
-    bot.sendMessage(chatId, `No permission for ${chatId}.`)
+    bot.sendMessage(chatId, `No permission for ${chatId}. `)
   }
 }
