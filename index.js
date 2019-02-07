@@ -4,7 +4,8 @@ require("dotenv").config()
 
 const
   telegramToken = process.env.TELEGRAM_TOKEN,
-  adminUser = process.env.ADMIN_USER
+  adminUser = process.env.ADMIN_USER,
+  maxMessageLength = 4096 - 10
 
 let commands
 try {
@@ -67,7 +68,10 @@ function mainHandler({ data, message }) {
       shellCommand = data
     }
     shell.exec(shellCommand, { silent: true }, (code, stdout, stderr) => {
-      bot.sendMessage(chatId, "```\n" + (stdout.trim() || stderr.trim() || "no output") + "\n```", options)
+      let messages = (stdout.trim() || stderr.trim() || "no output").match(new RegExp(`(.{1,${maxMessageLength}})`, "gs"))
+      for (let message of messages) {
+        bot.sendMessage(chatId, "```\n" + message + "\n```", options)
+      }
     })
   } else {
     bot.sendMessage(chatId, "No permission.")
