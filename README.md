@@ -66,3 +66,10 @@ Additional options:
 If more than one command matches the message, the first one in order will be taken.
 
 All other commands that are not matched in this file are executed like that on the shell.
+
+
+## TODO
+
+- [ ] Let bot pin a message in a group and update that message regularly (like `uptime`)
+- [ ] Add more than one admin
+- [ ] Add users with user permissions
