@@ -58,9 +58,9 @@ function mainHandler({ data, message }) {
       let commandToExecute = command
       let matches = data.match(new RegExp(match))
       // Replace parameters
-      let index = 1
+      let index = 0
       while (index < matches.length) {
-        commandToExecute = commandToExecute.replace(`{${index - 1}}`, matches[index])
+        commandToExecute = commandToExecute.replace(`{${index}}`, matches[index])
         index += 1
       }
       shellCommand = commandToExecute

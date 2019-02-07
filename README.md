@@ -47,13 +47,13 @@ You can create a commands.json file in the root folder of the project:
 ]
 ```
 
-These are basically shortcuts for longer commands and will be shown as a keyboard if `keyboard` is `true`. The matched groups in the match will replace patterns `{x}` in the command where `x` is the zero-based index of the group. Example:
+These are basically shortcuts for longer commands and will be shown as a keyboard if `keyboard` is `true`. The matched groups in the match will replace patterns `{x}` in the command where `x` is the index of the group (where `{0}` represents the whole match and `{1}` and onwards represent the matched groups). Example:
 
 ```json
 [
   {
     "match": "ls (.*)",
-    "command": "ls {0}",
+    "command": "ls {1}",
     "keyboard": false
   }
 ]
