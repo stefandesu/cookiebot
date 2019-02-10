@@ -72,6 +72,7 @@ All other commands that are not matched in this file are executed like that on t
 ## Fixed commands
 
 - `/list` - Returns a list of commands (`match` => `command`)
+- `/pin [x] command` - Pins a message and repeats it every `x` seconds (default: 10 seconds)
 
 
 ## TODO
