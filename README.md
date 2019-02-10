@@ -27,11 +27,14 @@ npm run dev
 ```
 TELEGRAM_TOKEN=123456789:abcdefghijkl...xyz
 ADMIN_USERS=12345678,87654321
+STARTUP_MESSAGE=1
 ```
 
 To obtain a token, message [@BotFather](https://t.me/BotFather).
 
 `ADMIN_USERS` can include group chats as well.
+
+If `STARTUP_MESSAGE` is set, every admin is going to get a message when the bot is (re)started.
 
 ## Usage
 

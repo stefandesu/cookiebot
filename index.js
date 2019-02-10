@@ -6,7 +6,8 @@ const _ = require("lodash")
 const
   telegramToken = process.env.TELEGRAM_TOKEN,
   adminUsers = (process.env.ADMIN_USERS || "").split(","),
-  maxMessageLength = 4096 - 10
+  maxMessageLength = 4096 - 10,
+  startupMessage = !!process.env.STARTUP_MESSAGE
 
 let commands
 try {
@@ -45,6 +46,13 @@ console.log(options)
 const bot = new TelegramBot(telegramToken, {polling: true})
 bot.onText(/.*/, textHandler)
 bot.on("callback_query", mainHandler)
+
+// Send start message to all admins
+if (startupMessage) {
+  for (let chatId of adminUsers) {
+    bot.sendMessage(chatId, "Cookiebot restarted. If you had pinned messages, you need to pin them again.")
+  }
+}
 
 function textHandler(message) {
   mainHandler({
