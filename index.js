@@ -77,15 +77,16 @@ function mainHandler({ data, message }) {
       let messageId
       let args = data.split(" ")
       if (args.length >= 2) {
-        let command, interval = 10
+        let command, interval = 30
         if (args.length == 2) {
           command = args.slice(1).join(" ")
         } else {
           command = args.slice(2).join(" ")
           // Allow a minimum of 5 second interval
-          interval = Math.max(parseFloat(args[1]) || interval, 5)
+          interval = Math.max(parseFloat(args[1]) || interval, 10)
         }
         interval *= 1000
+        let pinned = false
         let newOptions = _.omit(options, ["reply_markup"])
         bot.sendMessage(chatId, command, newOptions).then(message => {
           messageId = message.message_id
@@ -97,7 +98,11 @@ function mainHandler({ data, message }) {
             shell.exec(command, { silent: true }, (code, stdout, stderr) => {
               let text = (stdout.trim() || stderr.trim() || "no output").match(new RegExp(`(.{1,${maxMessageLength}})`, "gs"))[0]
               bot.editMessageText("```\n" + text + "\n```", Object.assign({ chat_id: chatId, message_id: messageId }, newOptions)).then(() => {
-                bot.pinChatMessage(chatId, messageId).catch(() => {})
+                if (!pinned) {
+                  pinned = true
+                  // Try to pin message (does not work in private chats)
+                  bot.pinChatMessage(chatId, messageId).catch(() => {})
+                }
               })
             })
           }
