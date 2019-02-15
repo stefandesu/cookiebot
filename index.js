@@ -140,9 +140,21 @@ function mainHandler({ data, message }) {
           bot.sendMessage(chatId, "Message could not be deleted. Note that this is only possible in a group where the bot has the correct permissions.", options)
         })
       }
-      let messages = (stdout.trim() || stderr.trim() || "no output").match(new RegExp(`(.{1,${maxMessageLength}})`, "gs"))
-      for (let message of messages) {
+      let message = (stdout.trim() || stderr.trim() || "no output")
+      if (message.length > maxMessageLength) {
+        bot.sendDocument(chatId, Buffer.from(message, "utf8"), {}, {
+          filename: "output.txt",
+          contentType: "text/plain"
+        })
+      } else {
+        // Send message normally
+        // Workaround for error when sending Markdown output
+        let prevLength = message.length
+        message = message.split("```").join("``")
         bot.sendMessage(chatId, "```\n" + message + "\n```", options)
+        if (prevLength != message.length) {
+          bot.sendMessage(chatId, "Note: Message was adjusted to not cause errors (``` replaced by ``).")
+        }
       }
     })
   } else {
