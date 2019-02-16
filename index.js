@@ -119,6 +119,18 @@ function mainHandler({ data, message }) {
       clearInterval(pinned[chatId])
       return
     }
+    if (data.startsWith("/file ")) {
+      data = data.replace("/file ", "")
+      // eslint-disable-next-line no-invalid-regexp
+      let files = data.split(/(?<!\\) /)
+      for (let file of files) {
+        file = file.split("\\ ").join("\ ")
+        bot.sendDocument(chatId, file).catch(() => {
+          bot.sendMessage(chatId, `Error sending file ${file}.`)
+        })
+      }
+      return
+    }
     let matchedCommand = commands.find(({ match }) => data.match(new RegExp(match)))
     let { match, command, deleteMessage } = matchedCommand || {}
     if (matchedCommand) {

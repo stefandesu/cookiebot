@@ -76,6 +76,7 @@ All other commands that are not matched in this file are executed like that on t
 
 - `/list` - Returns a list of commands (`match` => `command`)
 - `/pin [x] command` - Pins a message and repeats it every `x` seconds (default: 10 seconds)
+- `/file filename [filename ...]` - Sends one or more file from the server (escape spaces with `\`)
 
 
 ## TODO
