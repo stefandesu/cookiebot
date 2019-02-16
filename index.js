@@ -6,7 +6,7 @@ const _ = require("lodash")
 const
   telegramToken = process.env.TELEGRAM_TOKEN,
   adminUsers = (process.env.ADMIN_USERS || "").split(","),
-  maxMessageLength = 4096 - 10,
+  maxMessageLength = 4096 - 14,
   startupMessage = !!process.env.STARTUP_MESSAGE
 
 let commands
@@ -23,7 +23,7 @@ for (let command of commands) {
 console.log()
 
 let options = {
-  parse_mode: "Markdown",
+  parse_mode: "HTML",
   reply_markup: {
     keyboard: []
   }
@@ -141,20 +141,16 @@ function mainHandler({ data, message }) {
         })
       }
       let text = (stdout.trim() || stderr.trim() || "no output")
-      if (text.length > maxMessageLength) {
+      // Replace HTML symbols (see https://core.telegram.org/bots/api#html-style)
+      let adjustedText = text.split("&").join("&amp;").split("<").join("&lt;").split(">").join("&gt;")
+      if (adjustedText.length > maxMessageLength) {
         bot.sendDocument(chatId, Buffer.from(text, "utf8"), {}, {
           filename: "output.txt",
           contentType: "text/plain"
         })
       } else {
         // Send message normally
-        // Workaround for error when sending Markdown output
-        let prevLength = text.length
-        text = text.split("```").join("``")
-        bot.sendMessage(chatId, "```\n" + text + "\n```", options)
-        if (prevLength != text.length) {
-          bot.sendMessage(chatId, "Note: Message was adjusted to not cause errors (``` replaced by ``).")
-        }
+        bot.sendMessage(chatId, "<pre>" + adjustedText + "</pre>", options)
       }
     })
   } else {
